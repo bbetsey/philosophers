@@ -33,7 +33,7 @@ typedef struct s_args
 	int				sleep_time;
 	int				cycles;
 	long long		start_time;
-	pthread_mutex_t display_block;
+	pthread_mutex_t	display_block;
 }					t_args;
 
 typedef struct s_phil
@@ -41,22 +41,27 @@ typedef struct s_phil
 	t_args			*args;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	pthread_mutex_t die;
+	pthread_mutex_t	die;
 	long long		last_eating;
 	int				count;
 	int				index;
 }					t_phil;
 
-// main
+// threads
+void				start_threads(t_phil *phils, int n);
 void				sleeping(t_phil *phil);
+void				*process(void *tmp);
 
 // utils
-long long 			get_time(void);
+long long			get_time(void);
+void				display(char *msg, t_phil *phil);
+int					ft_strcmp(char *s1, char *s2);
+void				args_init(t_args *args, char **argv, int argc);
+void				start_threads(t_phil *phils, int n);
 
 // utils_libft
 int					ft_atoi(char *str);
 void				ft_putnbr_fd(long long n, int fd);
 int					ft_strlen(char *str);
-int					ft_strcmp(char *s1, char *s2);
 
 #endif
