@@ -28,6 +28,7 @@ void	begin_simulation(t_phil *phils)
 
 	phils->args->start_time = get_time();
 	start_threads(phils, 0);
+	usleep(1000);
 	start_threads(phils, 1);
 	while (1)
 	{
@@ -57,10 +58,10 @@ void	start(t_args *args)
 	{
 		pthread_mutex_init(&phils[i].die, NULL);
 		phils[i].left_fork = &forks[i];
-		if ((i + 1) > args->phil_count)
-			phils[i].right_fork = &forks[0];
-		else
+		if ((i + 1) <= args->phil_count)
 			phils[i].right_fork = &forks[i + 1];
+		else
+			phils[i].right_fork = &forks[0];
 		phils[i].index = i;
 		phils[i].count = 0;
 		phils[i].args = args;
