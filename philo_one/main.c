@@ -28,7 +28,6 @@ void	begin_simulation(t_phil *phils)
 
 	phils->args->start_time = get_time();
 	start_threads(phils, 0);
-	usleep(1000);
 	start_threads(phils, 1);
 	while (1)
 	{
@@ -36,7 +35,7 @@ void	begin_simulation(t_phil *phils)
 		res = check_philosophers(phils, &end);
 		if (!res)
 			return ;
-		if (end && phils->count && phils->args->cycles)
+		if (end && phils->args->cycles)
 		{
 			display("cycles ended", phils);
 			return ;
@@ -47,9 +46,11 @@ void	begin_simulation(t_phil *phils)
 void	start(t_args *args)
 {
 	int				i;
-	t_phil			phils[args->phil_count];
-	pthread_mutex_t	forks[args->phil_count];
+	t_phil			*phils;
+	pthread_mutex_t	*forks;
 
+	phils = malloc(sizeof(t_phil) * args->phil_count);
+	forks = malloc(sizeof(pthread_mutex_t) * args->phil_count);
 	i = 0;
 	while (i < args->phil_count)
 		pthread_mutex_init(&forks[i++], NULL);
@@ -58,14 +59,10 @@ void	start(t_args *args)
 	{
 		pthread_mutex_init(&phils[i].die, NULL);
 		phils[i].left_fork = &forks[i];
-		if ((i + 1) <= args->phil_count)
-			phils[i].right_fork = &forks[i + 1];
-		else
-			phils[i].right_fork = &forks[0];
+		phils[i].right_fork = &forks[(i + 1) % args->phil_count];
 		phils[i].index = i;
 		phils[i].count = 0;
 		phils[i].args = args;
-		phils[i].last_eating = 0;
 		i++;
 	}
 	begin_simulation(phils);
