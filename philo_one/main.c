@@ -66,6 +66,8 @@ void	start(t_args *args)
 		i++;
 	}
 	begin_simulation(phils);
+	free(forks);
+	free(phils);
 }
 
 int	main(int argc, char **argv)

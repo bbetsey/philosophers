@@ -45,7 +45,7 @@ void	display(char *msg, t_phil *phil)
 	time = get_time() - phil->args->start_time;
 	ft_putnbr_fd(time, 1);
 	write(1, " ", 1);
-	ft_putnbr_fd(phil->index, 1);
+	ft_putnbr_fd(phil->index + 1, 1);
 	write(1, " ", 1);
 	write(1, msg, ft_strlen(msg));
 	write(1, "\n", 1);

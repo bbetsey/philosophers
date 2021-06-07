@@ -5,6 +5,8 @@ void	*process(void *tmp)
 	t_phil	*phil;
 
 	phil = (t_phil *)tmp;
+	if (phil->args->cycles && phil->args->cycles == phil->count)
+		return (0);
 	pthread_mutex_lock(phil->left_fork);
 	display("has taken a fork", phil);
 	pthread_mutex_lock(phil->right_fork);
