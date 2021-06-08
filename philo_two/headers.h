@@ -1,5 +1,5 @@
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef HEADERS_H
+# define HEADERS_H
 
 # include <stdio.h>
 # include <unistd.h>
