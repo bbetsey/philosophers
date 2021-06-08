@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "headers.h"
 
 int	check_philosophers(t_phil *phils, int *end)
 {

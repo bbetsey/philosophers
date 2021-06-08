@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "headers.h"
 
 static int	ft_isspace(char c)
 {

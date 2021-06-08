@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "headers.h"
 
 long long	get_time(void)
 {
