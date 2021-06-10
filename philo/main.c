@@ -10,7 +10,7 @@ int	check_philosophers(t_phil *phils, int *end)
 		pthread_mutex_lock(&phils[i].die);
 		if (get_time() - phils[i].last_eating > phils[i].args->die_time)
 		{
-			display("died", &phils[i]);
+			display(" died\n", &phils[i]);
 			return (0);
 		}
 		pthread_mutex_unlock(&phils[i].die);
@@ -28,6 +28,7 @@ void	begin_simulation(t_phil *phils)
 
 	phils->args->start_time = get_time();
 	start_threads(phils, 0);
+	usleep(1000);
 	start_threads(phils, 1);
 	while (1)
 	{
@@ -37,7 +38,7 @@ void	begin_simulation(t_phil *phils)
 			return ;
 		if (end && phils->args->cycles)
 		{
-			display("cycles ended", phils);
+			display_end(phils);
 			return ;
 		}
 	}
@@ -60,7 +61,7 @@ void	start(t_args *args)
 		pthread_mutex_init(&phils[i].die, NULL);
 		phils[i].left_fork = &forks[i];
 		phils[i].right_fork = &forks[(i + 1) % args->phil_count];
-		phils[i].index = i;
+		phils[i].index = ft_itoa(i + 1);
 		phils[i].count = 0;
 		phils[i].args = args;
 		i++;

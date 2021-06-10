@@ -36,15 +36,25 @@ typedef struct s_args
 	pthread_mutex_t	display_block;
 }					t_args;
 
+typedef struct s_display
+{
+	char			*msg;
+	pthread_mutex_t	*display_block;
+	long long		*start_time;
+	int				index;
+}					t_display;
+
 typedef struct s_phil
 {
 	t_args			*args;
+	pthread_t		*treads;
+	t_display		*data;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	die;
 	long long		last_eating;
 	int				count;
-	int				index;
+	char			*index;
 }					t_phil;
 
 // threads
@@ -55,13 +65,17 @@ void				*process(void *tmp);
 // utils
 long long			get_time(void);
 void				display(char *msg, t_phil *phil);
+void				*display_msg(void *tmp);
 int					ft_strcmp(char *s1, char *s2);
 void				args_init(t_args *args, char **argv, int argc);
 void				start_threads(t_phil *phils, int n);
+void				display_end(t_phil *phil);
 
 // utils_libft
 int					ft_atoi(char *str);
 void				ft_putnbr_fd(long long n, int fd);
 int					ft_strlen(char *str);
+char				*ft_itoa(int n);
+char				*ft_strjoin(char *s1, char *s2);
 
 #endif

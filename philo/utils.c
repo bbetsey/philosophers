@@ -34,22 +34,20 @@ void	args_init(t_args *args, char **argv, int argc)
 
 void	display(char *msg, t_phil *phil)
 {
-	long long	time;
+	char	*str;
 
+	str = ft_itoa(get_time() - phil->args->start_time);
+	str = ft_strjoin(str, phil->index);
+	str = ft_strjoin(str, msg);
 	pthread_mutex_lock(&phil->args->display_block);
-	if (!ft_strcmp(msg, "cycles ended"))
-	{
-		printf(BOLDGREEN"End of cycles\n"RESET"");
-		return ;
-	}
-	time = get_time() - phil->args->start_time;
-	ft_putnbr_fd(time, 1);
-	write(1, " ", 1);
-	ft_putnbr_fd(phil->index + 1, 1);
-	write(1, " ", 1);
-	write(1, msg, ft_strlen(msg));
-	write(1, "\n", 1);
-	if (!ft_strcmp(msg, "died"))
+	write(1, str, ft_strlen(str));
+	if (!ft_strcmp(msg, " died\n"))
 		return ;
 	pthread_mutex_unlock(&phil->args->display_block);
+}
+
+void	display_end(t_phil *phil)
+{
+	pthread_mutex_lock(&phil->args->display_block);
+	printf(BOLDGREEN"End of cycles\n"RESET"");
 }
