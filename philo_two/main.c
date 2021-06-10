@@ -48,14 +48,14 @@ void	start(t_args *args)
 	t_phil			*phils;
 
 	phils = malloc(sizeof(t_phil) * args->phil_count);
-	sem_unlink("/forks");
-	sem_unlink("/die");
-	sem_unlink("/display");
-	sem_unlink("/wait");
-	args->forks = sem_open("/forks", O_CREAT, O_RDWR, args->phil_count);
-	args->forks = sem_open("/die", O_CREAT, O_RDWR, 1);
-	args->forks = sem_open("/display", O_CREAT, O_RDWR, 1);
-	args->forks = sem_open("/wait", O_CREAT, O_RDWR, 1);
+	sem_unlink("forks");
+	sem_unlink("die");
+	sem_unlink("display");
+	sem_unlink("stop");
+	args->forks = sem_open("forks", O_CREAT, 0644, args->phil_count);
+	args->die = sem_open("die", O_CREAT, 0644, 1);
+	args->display = sem_open("display", O_CREAT, 0644, 1);
+	args->stop = sem_open("stop", O_CREAT, 0644, 1);
 	i = 0;
 	while (i < args->phil_count)
 	{

@@ -6,6 +6,11 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <stdlib.h>
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <string.h>
+# include <err.h>
+# include <errno.h>
 # include <semaphore.h>
 
 # define RESET			"\033[0m"
@@ -37,7 +42,7 @@ typedef struct s_args
 	sem_t			*display;
 	sem_t			*die;
 	sem_t			*forks;
-	sem_t			*wait;
+	sem_t			*stop;
 }					t_args;
 
 typedef struct s_phil
