@@ -20,7 +20,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-void	args_init(t_args *args, char **argv, int argc)
+int	args_init(t_args *args, char **argv, int argc)
 {
 	args->phil_count = ft_atoi(argv[1]);
 	args->die_time = ft_atoi(argv[2]);
@@ -28,18 +28,26 @@ void	args_init(t_args *args, char **argv, int argc)
 	args->sleep_time = ft_atoi(argv[4]);
 	args->cycles = 0;
 	if (argc == 6)
+	{
 		args->cycles = ft_atoi(argv[5]);
+		if (!args->cycles)
+			return(0);
+	}
+	if (args->phil_count < 2 || args->phil_count > 200
+		|| args->die_time < 1 || args->eat_time < 1 || args->sleep_time < 1)
+		return (0);
 	pthread_mutex_init(&args->display_block, NULL);
+	return (1);
 }
 
 void	display(char *msg, t_phil *phil)
 {
 	char	*str;
 
+	pthread_mutex_lock(&phil->args->display_block);
 	str = ft_itoa(get_time() - phil->args->start_time);
 	str = ft_strjoin(str, phil->index);
 	str = ft_strjoin(str, msg);
-	pthread_mutex_lock(&phil->args->display_block);
 	write(1, str, ft_strlen(str));
 	if (!ft_strcmp(msg, " died\n"))
 		return ;

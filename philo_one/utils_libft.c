@@ -33,31 +33,6 @@ int	ft_atoi(char *str)
 	return (result);
 }
 
-void	ft_putchar_fd(char s, int fd)
-{
-	write(fd, &s, 1);
-}
-
-void	ft_putnbr_fd(long long n, int fd)
-{
-	long long	num;
-
-	if (n < 0)
-	{
-		write(fd, "-", 1);
-		num = -n;
-	}
-	else
-		num = n;
-	if (num >= 10)
-	{
-		ft_putnbr_fd(num / 10, fd);
-		ft_putnbr_fd(num % 10, fd);
-	}
-	else
-		ft_putchar_fd(num + 48, fd);
-}
-
 int	ft_strlen(char *str)
 {
 	int		len;
@@ -71,4 +46,27 @@ int	ft_strlen(char *str)
 		len++;
 	}
 	return (len);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*strjoin;
+	char	*buf_strjoin;
+	int		s1_len;
+	int		s2_len;
+
+	if (!s2)
+		return ((char *)s1);
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	strjoin = malloc((s1_len + s2_len + 1) * sizeof(char));
+	if (!strjoin)
+		return (0);
+	buf_strjoin = strjoin;
+	while (*s1)
+		*strjoin++ = *s1++;
+	while (*s2)
+		*strjoin++ = *s2++;
+	*strjoin = '\0';
+	return (buf_strjoin);
 }

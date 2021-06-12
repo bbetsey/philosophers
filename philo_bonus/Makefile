@@ -1,7 +1,8 @@
-NAME	= philo_two
+NAME	= philo_bonus
 
 SRCS	= main.c \
 			threads.c \
+			itoa.c \
 			utils.c \
 			utils_libft.c
 

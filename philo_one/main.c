@@ -80,7 +80,8 @@ int	main(int argc, char **argv)
 		printf("Error: \n");
 		return (1);
 	}
-	args_init(&args, argv, argc);
+	if (!args_init(&args, argv, argc))
+		return (1);
 	start(&args);
 	return (0);
 }

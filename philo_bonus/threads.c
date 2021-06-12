@@ -8,15 +8,15 @@ void	*process(void *tmp)
 	while (1)
 	{
 		if (phil->args->cycles && phil->args->cycles == phil->count)
-			return (0);
+			display_end(phil);
 		sem_wait(phil->args->stop);
 		sem_wait(phil->args->forks);
-		display("has taken a fork", phil);
+		display(" has taken a fork\n", phil);
 		sem_wait(phil->args->forks);
 		sem_post(phil->args->stop);
 		sem_wait(phil->args->die);
-		display("has taken a fork", phil);
-		display("is eating", phil);
+		display(" has taken a fork\n", phil);
+		display(" is eating\n", phil);
 		phil->last_eating = get_time();
 		sem_post(phil->args->die);
 		usleep(1000 * phil->args->eat_time);
@@ -30,22 +30,23 @@ void	*process(void *tmp)
 
 void	sleeping(t_phil *phil)
 {
-	display("is sleeping", phil);
+	display(" is sleeping\n", phil);
 	usleep(1000 * phil->args->sleep_time);
-	display("is thinking", phil);
+	display(" is thinking\n", phil);
 }
 
-void	start_threads(t_phil *phils)
+void	start_thread(t_phil *phil)
 {
 	pthread_t	thread;
-	int			i;
 
-	i = 0;
-	while (i < phils->args->phil_count)
+	phil->last_eating = get_time();
+	pthread_create(&thread, NULL, process, (void *)phil);
+	pthread_detach(thread);
+	while (1)
 	{
-		phils[i].last_eating = get_time();
-		pthread_create(&thread, NULL, process, (void *)&phils[i]);
-		pthread_detach(thread);
-		i++;
+		sem_wait(phil->args->die);
+		if (get_time() - phil->last_eating > phil->args->die_time)
+			display(" died\n", phil);
+		sem_post(phil->args->die);
 	}
 }

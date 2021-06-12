@@ -1,45 +1,40 @@
 #include "headers.h"
 
-int	check_philosophers(t_phil *phils, int *end)
+void	waiting(t_phil *phils)
 {
-	int		i;
+	int		status;
+	int		count;
 
-	i = 0;
-	while (i < phils->args->phil_count)
+	count = 0;
+	status = 0;
+	while (status == 0 && count < phils->args->phil_count)
 	{
-		sem_wait(phils->args->die);
-		if (get_time() - phils[i].last_eating > phils[i].args->die_time)
-		{
-			display("died", &phils[i]);
-			return (0);
-		}
-		sem_post(phils->args->die);
-		if (phils[i].count < phils[i].args->cycles)
-			*end = 0;
-		i++;
+		waitpid(-1, &status, 0);
+		status = WEXITSTATUS(status);
+		count++;
 	}
-	return (1);
+	count = 0;
+	while (count < phils->args->phil_count)
+	{
+		kill(phils[count].pid, SIGKILL);
+		count++;
+	}
 }
 
 void	begin_simulation(t_phil *phils)
 {
-	int		res;
-	int		end;
+	int		i;
 
 	phils->args->start_time = get_time();
-	start_threads(phils);
-	while (1)
+	i = 0;
+	while (i < phils->args->phil_count)
 	{
-		end = 1;
-		res = check_philosophers(phils, &end);
-		if (!res)
-			return ;
-		if (end && phils->args->cycles)
-		{
-			display("cycles ended", phils);
-			return ;
-		}
+		phils[i].pid = fork();
+		if (phils[i].pid == 0)
+			start_thread(&phils[i]);
+		i++;
 	}
+	waiting(phils);
 }
 
 void	start(t_args *args)
@@ -59,7 +54,7 @@ void	start(t_args *args)
 	i = 0;
 	while (i < args->phil_count)
 	{
-		phils[i].index = i;
+		phils[i].index = ft_itoa(i + 1);
 		phils[i].count = 0;
 		phils[i].args = args;
 		i++;
@@ -77,7 +72,8 @@ int	main(int argc, char **argv)
 		printf("Error: \n");
 		return (1);
 	}
-	args_init(&args, argv, argc);
+	if (!args_init(&args, argv, argc))
+		return (1);
 	start(&args);
 	return (0);
 }

@@ -7,6 +7,8 @@ void	*process(void *tmp)
 	phil = (t_phil *)tmp;
 	while (1)
 	{
+		if (phil->args->cycles && phil->args->cycles == phil->count)
+			return (0);
 		pthread_mutex_lock(phil->left_fork);
 		display(" has taken a fork\n", phil);
 		pthread_mutex_lock(phil->right_fork);
@@ -15,15 +17,20 @@ void	*process(void *tmp)
 		pthread_mutex_unlock(&phil->die);
 		display(" has taken a fork\n", phil);
 		display(" is eating\n", phil);
-		usleep(1000 * phil->args->eat_time);
+		usleep(1000 * phil->args->eat_time - 5000);
 		pthread_mutex_unlock(phil->right_fork);
 		pthread_mutex_unlock(phil->left_fork);
-		phil->count++;
-		display(" is sleeping\n", phil);
-		usleep(1000 * phil->args->sleep_time);
-		display(" is thinking\n", phil);
+		sleeping(phil);
+		phil->count += 1;
 	}
 	return (0);
+}
+
+void	sleeping(t_phil *phil)
+{
+	display(" is sleeping\n", phil);
+	usleep(1000 * phil->args->sleep_time);
+	display(" is thinking\n", phil);
 }
 
 void	start_threads(t_phil *phils, int n)
