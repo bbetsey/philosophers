@@ -31,7 +31,7 @@ int	args_init(t_args *args, char **argv, int argc)
 	{
 		args->cycles = ft_atoi(argv[5]);
 		if (!args->cycles)
-			return(0);
+			return (0);
 	}
 	if (args->phil_count < 2 || args->phil_count > 200
 		|| args->die_time < 1 || args->eat_time < 1 || args->sleep_time < 1)
@@ -56,6 +56,7 @@ void	display(char *msg, t_phil *phil)
 void	display_end(t_phil *phil)
 {
 	sem_wait(phil->args->display);
-	printf(BOLDGREEN"End of cycles\n"RESET"");
+	printf(BOLDGREEN"End of cycles"BOLDMAGENTA" [%d:%d]\n"RESET"",
+		phil->args->cycles, phil->args->cycles * phil->args->phil_count);
 	exit(1);
 }

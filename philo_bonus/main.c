@@ -69,7 +69,7 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 	{
-		printf("Error: \n");
+		printf(BOLDRED"Error:"RESET" wrong number of arguments\n");
 		return (1);
 	}
 	if (!args_init(&args, argv, argc))

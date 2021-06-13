@@ -1,4 +1,4 @@
-NAME	= philo_one
+NAME	= philo
 
 SRCS	= main.c \
 			threads.c \
