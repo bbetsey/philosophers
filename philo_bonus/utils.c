@@ -30,11 +30,11 @@ int	args_init(t_args *args, char **argv, int argc)
 	if (argc == 6)
 	{
 		args->cycles = ft_atoi(argv[5]);
-		if (!args->cycles)
+		if (args->cycles <= 0)
 			return (0);
 	}
 	if (args->phil_count < 2 || args->phil_count > 200
-		|| args->die_time < 1 || args->eat_time < 1 || args->sleep_time < 1)
+		|| args->die_time < 60 || args->eat_time < 60 || args->sleep_time < 60)
 		return (0);
 	return (1);
 }
